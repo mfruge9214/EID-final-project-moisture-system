@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>588</width>
-    <height>444</height>
+    <width>537</width>
+    <height>445</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>100</x>
      <y>10</y>
-     <width>346</width>
+     <width>361</width>
      <height>52</height>
     </rect>
    </property>
@@ -35,7 +35,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Create New Sensor</string>
+    <string>Edit Selected Sensor</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -46,21 +46,9 @@
     <rect>
      <x>20</x>
      <y>70</y>
-     <width>561</width>
+     <width>501</width>
      <height>181</height>
     </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>10</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <family>Microsoft YaHei UI Light</family>
-     <pointsize>18</pointsize>
-    </font>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -69,14 +57,7 @@
     <enum>QFrame::Raised</enum>
    </property>
    <layout class="QFormLayout" name="formLayout">
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="newSensorName">
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
+    <item row="0" column="0">
      <widget class="QLabel" name="label_6">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -95,20 +76,23 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_5">
+    <item row="0" column="1">
+     <widget class="QSpinBox" name="targetHumiditySpinBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
-        <pointsize>18</pointsize>
+        <pointsize>12</pointsize>
        </font>
-      </property>
-      <property name="text">
-       <string>Sensor Name</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="1" column="0">
      <widget class="QLabel" name="label_7">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -123,32 +107,17 @@
        </font>
       </property>
       <property name="text">
-       <string>Sensor ID</string>
+       <string>Change Group</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="newSensorID">
-      <property name="text">
-       <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QSpinBox" name="targetHumiditySpinBox">
+    <item row="1" column="1">
+     <widget class="QComboBox" name="assignGroupDropdown">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
       </property>
      </widget>
     </item>
@@ -157,9 +126,9 @@
   <widget class="QFrame" name="frame_2">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>310</y>
-     <width>571</width>
+     <width>531</width>
      <height>91</height>
     </rect>
    </property>
@@ -171,7 +140,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="editSensorCancel">
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
@@ -184,7 +153,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="editSensorSave">
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
