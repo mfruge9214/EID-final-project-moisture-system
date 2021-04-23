@@ -142,7 +142,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QGroupBox" name="sensorSelectionBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -152,15 +152,7 @@
             <property name="title">
              <string>Sensor Selection</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QRadioButton" name="sensor_placeholder">
-               <property name="text">
-                <string>RadioButton</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QVBoxLayout" name="sensorSelectionLayout"/>
            </widget>
           </item>
           <item>
@@ -208,15 +200,7 @@
             <property name="title">
              <string>Group Selection</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QRadioButton" name="group_placeholder">
-               <property name="text">
-                <string>RadioButton</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QVBoxLayout" name="verticalLayout_4"/>
            </widget>
           </item>
           <item>

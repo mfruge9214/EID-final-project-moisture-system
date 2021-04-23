@@ -171,7 +171,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="createSensorCancel">
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
@@ -184,7 +184,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="createSensorSave">
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
