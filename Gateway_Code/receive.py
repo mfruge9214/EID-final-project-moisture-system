@@ -2,7 +2,7 @@ import serial
 import time
 
 serialPort = serial.Serial(
-    port="ttyUSB0", baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE
+    port="/dev/ttyUSB0", baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE
 )
 serialString = ""  # Used to hold data coming over UART
 while 1:
