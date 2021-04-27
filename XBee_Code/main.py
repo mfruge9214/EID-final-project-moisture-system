@@ -19,4 +19,4 @@ while True:
     xbee.transmit(xbee.ADDR_BROADCAST, output)
      
     #print("temp: " + str(temp) + "  moisture: " + str(touch))
-    time.sleep(1)
+    time.sleep(10)
