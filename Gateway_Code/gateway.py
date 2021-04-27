@@ -25,7 +25,7 @@ certificatePath = '../../rpi4.cert.pem'
 privateKeyPath = '../../rpi4.private.key'
 port = 8883
 clientId = 'basicPubSub'
-topic = 'PAWS/Sensordata'
+topic = 'PAWS/SensorData'
 
 myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
 myAWSIoTMQTTClient.configureEndpoint(host, port)
