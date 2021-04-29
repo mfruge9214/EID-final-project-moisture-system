@@ -8,6 +8,7 @@ import logging
 import time
 import argparse
 import json
+import targets
 
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
@@ -16,6 +17,8 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
+    data = json.loads(message.payload)
+    targets.targets[data['SensorID']] = data['Target']
 
 AllowedActions = ['both', 'publish', 'subscribe']
 
