@@ -20,7 +20,7 @@ def get_target(sensorID):
 
 def set_target(sensorID, target):
     targets = {}
-    with open(targets_file, 'w+') as f:
+    with open(targets_file, 'a+') as f:
         targets = json.load(f)
         targets[sensorID] = target
         json.dump(targets, targets_file, indent=4)
