@@ -2,6 +2,7 @@ import xbee
 from machine import I2C
 from moisture_sensor import Seesaw
 import time
+import json
 
 i2c_bus = I2C(1, freq=400000)
  
@@ -14,9 +15,12 @@ while True:
  
     # read temperature from the temperature sensor
     #temp = ss.get_temp()
-    output = str(touch) + '\n'
-    print(touch)
+    data = {
+        'ID': 1,
+        'Humidity': touch
+    }
+    output = json.dumps(data) + '\n'
+    print(output)
     xbee.transmit(xbee.ADDR_BROADCAST, output)
      
-    #print("temp: " + str(temp) + "  moisture: " + str(touch))
     time.sleep(10)

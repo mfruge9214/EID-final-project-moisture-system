@@ -6,8 +6,11 @@ import serial
 import time
 import json
 import pika
+import targets
 
 MeasurementID = 0
+
+targets.init_targets()
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='localhost'))
@@ -30,12 +33,16 @@ while 1:
         try:
             print(serialString.decode("Ascii"))
             MeasurementID += 1
-            data = {
-                'SensorID': 1,
-                'MeasurementID': MeasurementID,
-                'Humidity': int(serialString.strip()),
-                'Target': 400
-            }
+            # data = {
+            #     'SensorID': 1,
+            #     'MeasurementID': MeasurementID,
+            #     'Humidity': int(serialString.strip()),
+            #     'Target': 400
+            # }
+            data = json.loads(serialString.strip())
+            data['Target'] = targets.targets[data['SensorID']]
+            data['MeasurementID'] = MeasurementID
+
             channel.basic_publish(exchange='', routing_key='PAWS_DataQ', body=json.dumps(data))
             print(f'  [x] sent {data}')
         except:
