@@ -33,7 +33,7 @@ while 1:
         try:
             MeasurementID += 1
             data = json.loads(serialString.strip())
-            target = targets.targets[str(data['SensorID'])]
+            target = targets.get_target(str(data['SensorID']))
             data['Target'] = target
             data['MeasurementID'] = MeasurementID
 

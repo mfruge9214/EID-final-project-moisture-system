@@ -18,7 +18,7 @@ def customCallback(client, userdata, message):
     print(message.topic)
     print("--------------\n\n")
     data = json.loads(message.payload)
-    targets.targets[data['SensorID']] = data['Target']
+    targets.set_target(data['SensorID'], data['Target'])
 
 AllowedActions = ['both', 'publish', 'subscribe']
 
