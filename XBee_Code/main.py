@@ -16,7 +16,7 @@ while True:
     # read temperature from the temperature sensor
     #temp = ss.get_temp()
     data = {
-        'ID': 1,
+        'SensorID': 1,
         'Humidity': touch
     }
     output = json.dumps(data) + '\n'

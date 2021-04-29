@@ -31,16 +31,10 @@ while 1:
 
         # Print the contents of the serial data
         try:
-            print(serialString.decode("Ascii"))
             MeasurementID += 1
-            # data = {
-            #     'SensorID': 1,
-            #     'MeasurementID': MeasurementID,
-            #     'Humidity': int(serialString.strip()),
-            #     'Target': 400
-            # }
             data = json.loads(serialString.strip())
-            data['Target'] = targets.targets[data['SensorID']]
+            target = targets.targets[str(data['SensorID'])]
+            data['Target'] = target
             data['MeasurementID'] = MeasurementID
 
             channel.basic_publish(exchange='', routing_key='PAWS_DataQ', body=json.dumps(data))

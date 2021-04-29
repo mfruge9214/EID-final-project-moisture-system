@@ -25,7 +25,9 @@ certificatePath = '../../rpi4.cert.pem'
 privateKeyPath = '../../rpi4.private.key'
 port = 8883
 clientId = 'basicPubSub'
-topic = 'PAWS/SensorData'
+dataTopic = 'PAWS/SensorData'
+targetTopic = 'PAWS/SensorTargets'
+
 
 myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
 myAWSIoTMQTTClient.configureEndpoint(host, port)
@@ -39,7 +41,7 @@ myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
 myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 myAWSIoTMQTTClient.connect()
-myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
+myAWSIoTMQTTClient.subscribe(targetTopic, 1, customCallback)
 time.sleep(2)
 
 
@@ -50,8 +52,8 @@ channel.queue_declare(queue='PAWS_DataQ', durable=False)
 
 def rabbitmq_callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
-    myAWSIoTMQTTClient.publish(topic, body.decode("utf-8"), 1)
-    print('Published topic %s: %s\n' % (topic, body))
+    myAWSIoTMQTTClient.publish(dataTopic, body.decode("utf-8"), 1)
+    print('Published topic %s: %s\n' % (dataTopic, body))
 
 channel.basic_consume(queue='PAWS_DataQ', on_message_callback=rabbitmq_callback, auto_ack=True)
 
