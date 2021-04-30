@@ -1,3 +1,6 @@
+# This file was copied then slightly modified from:
+# https://github.com/adafruit/Adafruit_CircuitPython_seesaw/blob/master/adafruit_seesaw/seesaw.py
+
 # SPDX-FileCopyrightText: 2017 Dean Miller for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT

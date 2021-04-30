@@ -1,3 +1,6 @@
+# this file was based on the example code from:
+# https://learn.adafruit.com/adafruit-stemma-soil-sensor-i2c-capacitive-moisture-sensor?view=all
+
 import xbee
 from machine import I2C
 from moisture_sensor import Seesaw
@@ -12,9 +15,7 @@ ss = Seesaw(i2c_bus, addr=0x36)
 while True:
     # read moisture level through capacitive touch pad
     touch = ss.moisture_read()
- 
-    # read temperature from the temperature sensor
-    #temp = ss.get_temp()
+
     data = {
         'SensorID': 1,
         'Humidity': touch
