@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>867</width>
-    <height>712</height>
+    <height>836</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,26 +18,81 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_5">
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
-        <pointsize>24</pointsize>
+        <pointsize>18</pointsize>
        </font>
       </property>
-      <property name="text">
-       <string>PAWS Mobile Application</string>
+      <property name="title">
+       <string>View Selected Data</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Current Humidity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="output_CurrentHumidity"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Target Humidity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="output_TargetHumidity"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="font">
+       <font>
+        <family>Microsoft YaHei UI Light</family>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Selected Sensor Control</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="control_WaterOn">
+         <property name="text">
+          <string>Turn Water On</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="control_WaterOff">
+         <property name="text">
+          <string>Turn Water Off</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="control_Reset">
+         <property name="text">
+          <string>Reset Sensor</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item row="1" column="0">
@@ -67,7 +122,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QGroupBox" name="sensorSelectionBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -77,15 +132,7 @@
             <property name="title">
              <string>Sensor Selection</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <widget class="QRadioButton" name="sensor_placeholder">
-               <property name="text">
-                <string>RadioButton</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QVBoxLayout" name="sensorSelectionLayout"/>
            </widget>
           </item>
           <item>
@@ -102,7 +149,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="editSensor_PB">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -117,160 +164,29 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="font">
-          <font>
-           <pointsize>16</pointsize>
-          </font>
-         </property>
-         <property name="title">
-          <string>Groups</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string>Group Selection</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QRadioButton" name="group_placeholder">
-               <property name="text">
-                <string>RadioButton</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Create New Group</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Edit Selected Group</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QGroupBox" name="groupBox_5">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <family>Microsoft YaHei UI Light</family>
-        <pointsize>18</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
-      <property name="title">
-       <string>View Selected Data</string>
+      <property name="text">
+       <string>PAWS Mobile Application</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Current Humidity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Target Humidity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Operating State</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_3"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Designated Group</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit_4"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QGroupBox" name="groupBox_6">
-      <property name="font">
-       <font>
-        <family>Microsoft YaHei UI Light</family>
-        <pointsize>18</pointsize>
-       </font>
-      </property>
-      <property name="title">
-       <string>Selected Sensor Control</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QPushButton" name="pushButton_6">
-         <property name="text">
-          <string>Turn Water On</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_5">
-         <property name="text">
-          <string>Turn Water Off</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="text">
-          <string>Reset Sensor</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
    </layout>
@@ -281,9 +197,15 @@
      <x>0</x>
      <y>0</y>
      <width>867</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuHome">
+    <property name="title">
+     <string>Home</string>
+    </property>
+   </widget>
+   <addaction name="menuHome"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
