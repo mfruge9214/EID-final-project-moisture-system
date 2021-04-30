@@ -31,6 +31,12 @@ bridges the gap between each of these elements to pass data around as needed.
 The Qt UI application code runs on a Windows machine and allows the user to
 create new sensors and monitor and update existing sensors.
 
+  This file has dependencies that can be installed using `python -m pip install <package>`
+  
+  The list of packages is as follows:
+  - requests
+  - PyQt5
+
 ## Execution instructions
 1. The AWS code can be run as is, assuming you have proper permissions set up.
 2. There are two processes to run the gateway code. You can run them with
@@ -38,4 +44,4 @@ create new sensors and monitor and update existing sensors.
 3. The XBee code runs on a Digi XBee3 module. Instructions on how to run code
 can be found in Digi's
 [MicroPython Programming Guide](https://www.digi.com/resources/documentation/digidocs/PDFs/90002219.pdf)
-4. The Qt UI runs on a Windows machine with `python ui.py`
+4. The Qt UI runs on a Windows machine with `python PAWS_InterfaceRoutine.py`
