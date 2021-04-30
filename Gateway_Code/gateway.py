@@ -11,14 +11,17 @@ import json
 import targets
 
 # Custom MQTT message callback
-def customCallback(client, userdata, message):
-    print("Received a new message: ")
-    print(message.payload)
-    print("from topic: ")
-    print(message.topic)
-    print("--------------\n\n")
+def dataCallback(client, userdata, message):
     data = json.loads(message.payload)
+    print(f'Setting target of sensor {data['SensorID']} to {data['Target']}')
     targets.set_target(data['SensorID'], data['Target'])
+
+def actionCallback(client, userdata, message):
+    data = json.loads(message.payload)
+    if data['Action'] == 'reset':
+        print(f'Resetting sensor {data['SensorID']}')
+    else:
+        print(f'Turning sensor {data['SensorID']} {data['Action']}')
 
 AllowedActions = ['both', 'publish', 'subscribe']
 
@@ -30,6 +33,7 @@ port = 8883
 clientId = 'basicPubSub'
 dataTopic = 'PAWS/SensorData'
 targetTopic = 'PAWS/SensorTargets'
+actionsTopic = 'PAWS/SensorActions'
 
 
 myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
@@ -44,7 +48,8 @@ myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
 myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 myAWSIoTMQTTClient.connect()
-myAWSIoTMQTTClient.subscribe(targetTopic, 1, customCallback)
+myAWSIoTMQTTClient.subscribe(targetTopic, 1, dataCallback)
+myAWSIoTMQTTClient.subscribe(actionsTopic, 1, actionCallback)
 time.sleep(2)
 
 
