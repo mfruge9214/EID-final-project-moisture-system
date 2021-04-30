@@ -20,7 +20,8 @@ def get_target(sensorID):
 
 def set_target(sensorID, target):
     targets = {}
-    with open(targets_file, 'a+') as f:
+    with open(targets_file, 'r') as f:
         targets = json.load(f)
+    with open(targets_file, 'w') as f:
         targets[sensorID] = target
-        json.dump(targets, targets_file, indent=4)
+        json.dump(targets, f, indent=4)
