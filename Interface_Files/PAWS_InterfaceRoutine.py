@@ -1,16 +1,30 @@
 import sys
 
+import requests
 
 from PyQt5.QtWidgets import QMainWindow, QApplication , QDialog, QRadioButton, QCheckBox, QMessageBox
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 from PAWS_MainInterface import Ui_MainWindow
 import CreateSensorWindow
 import EditSensorWindow
 
 
+import json
+
 
 groupsEnabled = 0
 # Create a class for application error emitting
+
+
+
+def scaleValuesUp(value):
+	value = int(value)
+	return 200 + (value * 8)
+
+
+def scaleValuesDown(value):
+	value = int(value)
+	return int((value -200)/8)
 
 class customError(QObject):
 
@@ -18,6 +32,7 @@ class customError(QObject):
 	idError	  = pyqtSignal()
 	valError  = pyqtSignal()
 	editError = pyqtSignal()
+	selectionError = pyqtSignal()
 
 
 class AppWindow(QMainWindow): 
@@ -37,8 +52,10 @@ class AppWindow(QMainWindow):
 		self.errorEvt.nameError.connect(self.nameErrorHandler)
 		self.errorEvt.editError.connect(self.editErrorHandler)
 		self.errorEvt.idError.connect(self.idErrorHandler)
+		self.errorEvt.selectionError.connect(self.selectionErrorHandler)
 		# self.errorEvt.valError.connect(self.valErrorHandler)
 		self.initSubwindows()
+		self.initSensorList()
 
 
 
@@ -46,12 +63,18 @@ class AppWindow(QMainWindow):
 		# Register all the event callback functions
 		self.ui.addSensor_PB.clicked.connect(self.subWindowOpened)
 		self.ui.editSensor_PB.clicked.connect(self.subWindowOpened)
+		self.ui.control_WaterOn.clicked.connect(self.waterOnPressed)
+		self.ui.control_WaterOff.clicked.connect(self.waterOffPressed)
+		self.ui.control_Reset.clicked.connect(self.resetSensorPressed)
 
-		# self.subwindows = {
 
-		# 	1: self.createSensorWindow,
-		# 	2: self.editSensorWindow
-		# } 
+		self.updateTimer = QTimer()
+
+		self.updateTimer.timeout.connect(self.dataGetReq)
+		self.updateTimer.start(10000)
+
+
+		self.initOutputs()
 
 
 
@@ -77,8 +100,7 @@ class AppWindow(QMainWindow):
 
 
 					"editSensor"   : [self.editSensorWindow_ui.editSensorName, 
-									self.editSensorWindow_ui.editTargetHumiditySpinBox, 
-									self.editSensorWindow_ui.assignGroupDropdown]
+									self.editSensorWindow_ui.editTargetHumiditySpinBox]
 
 
 		}
@@ -127,12 +149,70 @@ class AppWindow(QMainWindow):
 		returnValue = msgBox.exec()
 
 
+	def selectionErrorHandler(self):
+
+		msgBox = QMessageBox()
+		msgBox.setIcon(QMessageBox.Information)
+		msgBox.setText("Please Select A Sensor")
+		msgBox.setWindowTitle("No Sensor Selected Error")
+		msgBox.setStandardButtons(QMessageBox.Ok)
+
+		returnValue = msgBox.exec()
+
+
+
+	def initSensorList(self):
+
+
+
+		resp = requests.get("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/targets")
+
+		response = resp.json()
+
+		for entry in response['Items']:
+
+			newSensor = {
+			"SensorName" : None,
+			"SensorID"	: None,
+			"Target": None,
+			"buttonObject": None
+			}
+
+			for item in entry.items():
+				key = None
+				value = None
+				s = (item)
+
+				for thing in s:
+
+					if(type(thing) is str):
+						key = thing
+					else:
+						for x, y in thing.items():
+							value = y
+
+				newSensor[key] = value
+				
+				# Create the button object to display
+			radioButton = QRadioButton("sensorRB_" + newSensor['SensorID'])
+			radioButton.setText(newSensor['SensorName'])
+			self.ui.sensorSelectionLayout.addWidget(radioButton)
+
+			# Connect the button to sensor button handler
+			radioButton.clicked.connect(self.sensorSelectChanged)
+
+			newSensor['buttonObject'] = radioButton
+
+			self.sensorList.append(newSensor)
+
+
+
 	def newSensorSaved(self):
 
 		newSensor = {
-				"sensorName" : None,
-				"sensorID"	: None,
-				"targetHumidity": None,
+				"SensorName" : None,
+				"SensorID"	: None,
+				"Target": None,
 				"buttonObject": None
 		}
 
@@ -144,28 +224,28 @@ class AppWindow(QMainWindow):
 			index = self.windowInputFields["createSensor"].index(field)
 
 			if(index == 0):
-				newSensor['sensorName'] = field.text()
+				newSensor['SensorName'] = field.text()
 
 			elif(index == 1):
-				newSensor["targetHumidity"] = field.value()
+				newSensor["Target"] = field.value()
 
 			elif(index == 2):
-				newSensor["sensorID"] = field.text()
+				newSensor["SensorID"] = field.text()
 
 
 
 		# Should ensure that sensor name and ID are unique, and allow application to continue or not
 		for sensor in self.sensorList:
 
-			(existingName, existingID) = (sensor["sensorName"], sensor["sensorID"])
+			(existingName, existingID) = (sensor["SensorName"], sensor["SensorID"])
 
-			if(newSensor['sensorName'] == existingName):
+			if(newSensor['SensorName'] == existingName):
 
 				print("Error: Sensor Name is not unique. Please try a different name")
 				self.errorEvt.nameError.emit()
 				return
 
-			if(newSensor['sensorID'] == existingID):
+			if(newSensor['SensorID'] == existingID):
 
 				print("Error: Sensor ID is not unique")
 				self.errorEvt.idError.emit()
@@ -174,8 +254,8 @@ class AppWindow(QMainWindow):
 
 
 		# Create the button object to display
-		radioButton = QRadioButton("sensorRB_" + newSensor['sensorID'])
-		radioButton.setText(newSensor['sensorName'])
+		radioButton = QRadioButton("sensorRB_" + newSensor['SensorID'])
+		radioButton.setText(newSensor['SensorName'])
 		self.ui.sensorSelectionLayout.addWidget(radioButton)
 
 		# Connect the button to sensor button handler
@@ -183,11 +263,39 @@ class AppWindow(QMainWindow):
 
 		newSensor['buttonObject'] = radioButton
 
-		# Add the sensor to the local list
+
+		newSensorPostData = {}
+
+		for key, value in newSensor.items():
+
+			if key != "buttonObject":
+				if key != "SensorID":
+					newSensorPostData[key] = value
+					if key == "Target":
+						newSensorPostData[key] = scaleValuesUp(value)
+
+		resp = requests.post("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + newSensor['SensorID'], json = newSensorPostData)
+
+				# Add the sensor to the local list
 		self.sensorList.append(newSensor)
 
 
 		self.subWindowClosed()
+
+
+
+	def initOutputs(self):
+
+		self.displays = {
+
+					'currentHum': self.ui.output_CurrentHumidity,
+					'Target'	: self.ui.output_TargetHumidity
+		}
+
+
+		for display in self.displays.values():
+			display.setText("No Data to Show")
+
 
 
 
@@ -198,7 +306,7 @@ class AppWindow(QMainWindow):
 		for sensor in self.sensorList:
 
 			if(clicked_btn == sensor["buttonObject"]):
-
+				print("Sensor Selected")
 				self.selectedSensor = sensor
 
 
@@ -210,16 +318,32 @@ class AppWindow(QMainWindow):
 
 
 			if(index == 0):
-				self.selectedSensor['sensorName'] = field.text()
+				self.selectedSensor['SensorName'] = field.text()
 
 			elif(index == 1):
-				self.selectedSensor["targetHumidity"] = field.value()
+				self.selectedSensor["Target"] = field.value()
 
 			elif(index == 2):
-				# self.selectedSensor["sensorID"] = field.text()
+				# self.selectedSensor["SensorID"] = field.text()
 				break
 
-		self.selectedSensor['buttonObject'].setText(self.selectedSensor['sensorName'])
+
+		sensorPutData = {}
+
+		for key, value in self.selectedSensor.items():
+
+			if key != 'buttonObject':
+				if key != 'SensorID': 
+					sensorPutData[key] = value
+					if key == "Target":
+						sensorPutData[key] = scaleValuesUp(value)
+					
+
+		resp = requests.put("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + self.selectedSensor['SensorID'], json = sensorPutData)
+
+
+		self.selectedSensor['buttonObject'].setText(self.selectedSensor['SensorName'])
+		
 
 		self.subWindowClosed()
 
@@ -266,11 +390,11 @@ class AppWindow(QMainWindow):
 
 					if(index == 0):
 
-						field.setText(self.selectedSensor["sensorName"])
+						field.setText(str(self.selectedSensor["SensorName"]))
 
 					if(index == 1):
 
-						field.setValue(self.selectedSensor["targetHumidity"])
+						field.setValue(int(self.selectedSensor["Target"]))
 
 					if(index == 2):
 						# Top level define to control groups
@@ -282,6 +406,83 @@ class AppWindow(QMainWindow):
 
 
 
+
+	def dataGetReq(self):
+
+		if(self.selectedSensor):
+
+			print("Getting data")
+			resp = requests.get("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + self.selectedSensor['SensorID'])
+
+			response = resp.json()
+
+			maxMeasID = 0
+			maxMeasIdx = 0
+
+			print(response)
+
+			for entry in response['Items']:
+
+				if(entry['SensorID']['N'] == self.selectedSensor['SensorID']):
+
+					print(maxMeasID)
+					print(maxMeasIdx)
+
+					print(entry)
+					if(int(entry['MeasurementID']['N']) > maxMeasID):
+
+						maxMeasID = int(entry['MeasurementID']['N'])
+
+						maxMeasIdx = response['Items'].index(entry)
+
+
+			data = response['Items'][maxMeasIdx]
+
+
+			self.displays['currentHum'].setText(str(scaleValuesDown(data['Humidity']['N'])))
+
+			try:
+				self.displays['Target'].setText(str(scaleValuesDown(data['Target']['S'])))
+
+			except:
+				self.displays['Target'].setText(str(scaleValuesDown(data['Target']['N'])))
+
+
+
+
+	def waterOnPressed(self):
+
+		try:
+			print("Pressed")
+			resp = requests.post("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + self.selectedSensor['SensorID'] + "/water/on")
+
+			print(resp)
+		except:
+			self.errorEvt.selectionError.emit()
+
+	def waterOffPressed(self):
+
+		try:
+			print("Off Pressed")
+
+			resp = requests.post("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + self.selectedSensor['SensorID'] + "/water/off")
+
+			print(resp)
+
+		except:
+			self.errorEvt.selectionError.emit()
+
+	def resetSensorPressed(self):
+
+		try:
+			print("Sensor Reset")
+
+			resp = requests.post("https://hb4bbdba0i.execute-api.us-east-2.amazonaws.com/alpha/sensors/" + self.selectedSensor['SensorID'] + "/reset")
+
+			print(resp)
+
+		except:
+			self.errorEvt.selectionError.emit()
 
 
 	def subWindowSaved(self):
